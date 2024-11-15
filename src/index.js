@@ -29,14 +29,14 @@ const pizzaData = [
     ingredients: "Tomato, mozarella, mushrooms, and onion",
     price: 12,
     photoName: "pizzas/funghi.jpg",
-    soldOut: false,
+    soldOut: true,
   },
   {
     name: "Pizza Salamino",
     ingredients: "Tomato, mozarella, and pepperoni",
-    price: 15,
+    price: 15.00,
     photoName: "pizzas/salamino.jpg",
-    soldOut: true,
+    soldOut: false,
   },
   {
     name: "Pizza Prosciutto",
@@ -77,46 +77,75 @@ function Menu() {
       price={pizza.price}
       photoName={pizza.photoName}
       soldOut={pizza.soldOut}
+      key={pizza.name}
     />
   ));
+  const numPizzas = pizzas.length;
   return (
     <main className="menu">
       <h2>Menu</h2>
-      <ul>
-        {pizzas}
-      </ul>
+      {numPizzas > 0 ? (
+        <>
+          <p>
+            Amazing pizzas made with fresh ingredients and a touch of love.
+            Choose your favorite from our selection below and enjoy a delightful meal that will satisfy your cravings.
+          </p>
+
+          <ul className="pizzas">
+            {pizzas}
+          </ul>
+        </>
+      ) : <p>Unfortunately, there are no items in the menu. Please come back later!</p>}
     </main>
   );
 }
-function Footer() {
-  // { 
-    // const hour = new Date().getHours();
-    // const openHour = 9;
-    // const closeHour = 22;
-    // const isOpen = hour >= openHour && hour <= closeHour;
+function Footer() { 
+  const hour = new Date().getHours();
+  const openHour = 9;
+  const closeHour = 22;
+  const isOpen = hour >= openHour && hour <= closeHour;
+  const someItems = pizzaData.length;
 
-  //   if (hour >= openHour && hour <= closeHour) {
-  //     alert('We are open');
-  //   }
-  // }
+  if (!someItems) return null;
+
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}.
-      We are open 24/7.
+      {isOpen ? (
+        <div className="order">
+          <p>
+            We're open until {closeHour}:00.
+            Come visit us or order online.
+          </p> 
+          <button className='btn'>Order Now</button>
+        </div>
+      ) : <p>We are happy to welcome you between {openHour}:00 and {closeHour}:00.</p>}
+      
     </footer>
   );
 }
 
 function Pizza(props) {
+
+  if (props.soldOut) return (
+    <li className='pizza sold-out'>
+      <img src={props.photoName} alt={props.name} />
+      <div>
+        <h3>{props.name}</h3>
+        <p>{props.ingredients}</p> 
+        <span>SOLD OUT</span>
+      </div>
+    </li>
+  );
+
   return (
-  <div className="pizza">
+  <li className="pizza">
     <img src={props.photoName} alt={props.name} />
     <div>
       <h3>{props.name}</h3>
       <p>{props.ingredients}</p> 
-      <span>{props.price}</span>
+      <span>${props.price}</span>
     </div>
-  </div>
+  </li>
   );
 }
 
